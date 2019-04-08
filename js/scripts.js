@@ -20,8 +20,8 @@ function serializeBooksFromResponse( response ){
 		let book = new Object()
 					
 		book['title'] = (typeof parsed_response.items[item].volumeInfo.title === 'undefined') ? 'Not available' : parsed_response.items[item].volumeInfo.title
-		book['authors'] = (typeof parsed_response.items[item].volumeInfo.authors === 'undefined') ? 'Not available' : parsed_response.items[item].volumeInfo.authors
-		book['description'] = (typeof parsed_response.items[item].volumeInfo.description === 'undefined') ? 'There is no available information at this time.' : parsed_response.items[item].volumeInfo.description
+		book['authors'] = (typeof parsed_response.items[item].volumeInfo.authors === 'undefined') ? false : parsed_response.items[item].volumeInfo.authors
+		book['description'] = (typeof parsed_response.items[item].volumeInfo.description === 'undefined') ? 'There is no available description at this time.' : parsed_response.items[item].volumeInfo.description
 		book['thumbnail'] = (typeof parsed_response.items[item].volumeInfo.imageLinks === "undefined") ? false : parsed_response.items[item].volumeInfo.imageLinks.thumbnail
 		
 		serialized.push(book)
@@ -45,9 +45,13 @@ function createHtmlElementsFromSerializedBooks( books ){
 		
 		let authors_div = document.createElement('div')
 		let all_authors = ''
-		for(let author in books[book].authors){
+		if(books[book].authors){
+			for(let author in books[book].authors){
 			all_authors += books[book].authors[author]
 			all_authors = (author < books[book].authors.length - 1) ? all_authors + ', ' : all_authors
+			} 
+		} else {
+			all_authors = 'not available'
 		}
 		let authors_div_content = document.createTextNode(all_authors)
 		authors_div.appendChild(authors_div_content)
