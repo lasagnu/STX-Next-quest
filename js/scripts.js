@@ -98,9 +98,9 @@ function deleteCurrentSearch(){
 	
 }
 
-if(window.addEventListener){
+if( window.addEventListener ){
 	window.addEventListener('scroll',scroll)
-}else if(window.attachEvent){
+}else if( window.attachEvent ){
 	window.attachEvent('onscroll',scroll);
 }
 
@@ -109,8 +109,8 @@ function scroll(ev){
     let st = Math.max(document.documentElement.scrollTop,document.body.scrollTop);
 	// when screen reaches bottom
 	if((st+document.documentElement.clientHeight)>=document.documentElement.scrollHeight ){
-           startIndex += 10
-		   findBooksByName(search_phrase, startIndex)
+		startIndex += 10
+		findBooksByName(search_phrase, startIndex)
     }
 }
 
