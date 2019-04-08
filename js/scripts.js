@@ -1,5 +1,5 @@
-const url = 'https://www.googleapis.com/books/v1/volumes?q='
-let startIndex = 0
+let url = 'https://www.googleapis.com/books/v1/volumes?q='
+let start_index = 0
 let search_phrase = ''
 
 function httpGetAsync(url, callback)
@@ -13,23 +13,23 @@ function httpGetAsync(url, callback)
     request.send(null)
 }
 
-function serializeBooksFromResponse( response ){
-	let serialized = new Array()
+function serializeBooksFromResponse(response){
+	let serialized_books = new Array()
 	let parsed_response = JSON.parse(response)
 	for (let item in parsed_response.items){
 		let book = new Object()
 					
-		book['title'] = (typeof parsed_response.items[item].volumeInfo.title === 'undefined') ? 'Not available' : parsed_response.items[item].volumeInfo.title
-		book['authors'] = (typeof parsed_response.items[item].volumeInfo.authors === 'undefined') ? false : parsed_response.items[item].volumeInfo.authors
-		book['description'] = (typeof parsed_response.items[item].volumeInfo.description === 'undefined') ? 'There is no available description at this time.' : parsed_response.items[item].volumeInfo.description
-		book['thumbnail'] = (typeof parsed_response.items[item].volumeInfo.imageLinks === "undefined") ? false : parsed_response.items[item].volumeInfo.imageLinks.thumbnail
+		book['title'] = (typeof parsed_response.items[item].volumeInfo.title === 'undefined') ? 'N/A' : parsed_response.items[item].volumeInfo.title
+		book['authors'] = (typeof parsed_response.items[item].volumeInfo.authors === 'undefined') ? 'N/A' : parsed_response.items[item].volumeInfo.authors
+		book['description'] = (typeof parsed_response.items[item].volumeInfo.description === 'undefined') ? 'No description is available.' : parsed_response.items[item].volumeInfo.description
+		book['thumbnail'] = (typeof parsed_response.items[item].volumeInfo.imageLinks === "undefined") ? 'img/noimg.png' : parsed_response.items[item].volumeInfo.imageLinks.thumbnail
 		
-		serialized.push(book)
+		serialized_books.push(book)
 	}
-	return serialized
+	return serialized_books
 }
 
-function createHtmlElementsFromSerializedBooks( books ){
+function createHtmlElementsFromSerializedBooks(books){
 	
 	let target_parent_div = document.getElementsByClassName('books_listing')
 	
@@ -44,16 +44,7 @@ function createHtmlElementsFromSerializedBooks( books ){
 		title_div.className = 'title'
 		
 		let authors_div = document.createElement('div')
-		let all_authors = ''
-		if(books[book].authors){
-			for(let author in books[book].authors){
-			all_authors += books[book].authors[author]
-			all_authors = (author < books[book].authors.length - 1) ? all_authors + ', ' : all_authors
-			} 
-		} else {
-			all_authors = 'not available'
-		}
-		let authors_div_content = document.createTextNode(all_authors)
+		let authors_div_content = document.createTextNode(books[book].authors)
 		authors_div.appendChild(authors_div_content)
 		authors_div.className = 'authors'
 		
@@ -63,7 +54,7 @@ function createHtmlElementsFromSerializedBooks( books ){
 		description_div.className = 'description'
 		
 		let img_div = document.createElement('img')
-		img_div.src = (books[book].thumbnail === false) ? 'img/noimg.png' : books[book].thumbnail
+		img_div.src = books[book].thumbnail
 		img_div.className = 'image'
 		
 		container.appendChild(title_div)
@@ -75,17 +66,17 @@ function createHtmlElementsFromSerializedBooks( books ){
 	}
 }
 
-function findBooksByName( search_phrase, startIndex ){
-	let complete_url = url + search_phrase + '&startIndex=' + startIndex
-	
+function findBooksByName(search_phrase, start_index){
+    
+	let complete_url = url + search_phrase + '&startIndex=' + start_index
+    
 	httpGetAsync(complete_url, function(cb) {
-				
+        
 				let parsed_response = JSON.parse(cb)
-				serialized = serializeBooksFromResponse(cb)
-				createHtmlElementsFromSerializedBooks(serialized)
-				
+				serializedBooks = serializeBooksFromResponse(cb)
+				createHtmlElementsFromSerializedBooks(serializedBooks)
+                
 	})
-	
 }
 
 function deleteCurrentSearch(){
@@ -98,19 +89,11 @@ function deleteCurrentSearch(){
 	
 }
 
-if( window.addEventListener ){
-	window.addEventListener('scroll',scroll)
-}else if( window.attachEvent ){
-	window.attachEvent('onscroll',scroll);
-}
-
 function scroll(ev){
-	
     let st = Math.max(document.documentElement.scrollTop,document.body.scrollTop);
-	// when screen reaches bottom
 	if((st+document.documentElement.clientHeight)>=document.documentElement.scrollHeight ){
-		startIndex += 10
-		findBooksByName(search_phrase, startIndex)
+        start_index += 10
+        findBooksByName(search_phrase, start_index)
     }
 }
 
@@ -119,14 +102,20 @@ document.addEventListener('DOMContentLoaded', function() {
 	[].forEach.call(document.querySelectorAll('.search_bar'), function(el) {
 		el.addEventListener('change', function() {
 			
-			startIndex = 0
+			start_index = 0
 			search_phrase = document.querySelectorAll('.search_bar')[0].value
 			
 			deleteCurrentSearch()
 			
-			findBooksByName(search_phrase, startIndex)
+			findBooksByName(search_phrase, start_index)
 		
 		})
 	})
+    
+    if(window.addEventListener){
+	   window.addEventListener('scroll',scroll)
+    }else if(window.attachEvent){
+	   window.attachEvent('onscroll',scroll);
+}
   
 })
