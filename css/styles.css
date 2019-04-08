@@ -4,16 +4,16 @@ body{
 
 input.search_bar {
 	display: block;
-    margin : 0 auto;
+	margin : 0 auto;
 	width: 40vw;
 	height: 5vh;
 	font-size: 36px;
 	text-align: center;
-    border-radius: 10px;
+	border-radius: 10px;
 }
 
 input.search_bar:focus{
-    outline: none;
+	outline: none;
 }
 
 
@@ -40,16 +40,16 @@ div.authors{
 	text-align: center;
 	font-size: 14px;
 	padding: 5px;
-    font-weight: lighter;
+	font-weight: lighter;
 }
 
 div.description{
 	text-align: center;
 	font-size: 16px;
 	overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
 	border-spacing: 30px;
 	
 }
