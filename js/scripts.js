@@ -71,11 +71,9 @@ function findBooksByName(search_phrase, start_index){
 	let complete_url = url + search_phrase + '&startIndex=' + start_index
     
 	httpGetAsync(complete_url, function(cb) {
-        
-				let parsed_response = JSON.parse(cb)
-				serializedBooks = serializeBooksFromResponse(cb)
-				createHtmlElementsFromSerializedBooks(serializedBooks)
-                
+		let parsed_response = JSON.parse(cb)
+		serializedBooks = serializeBooksFromResponse(cb)
+		createHtmlElementsFromSerializedBooks(serializedBooks)
 	})
 }
 
