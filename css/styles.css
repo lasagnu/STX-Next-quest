@@ -5,11 +5,17 @@ body{
 input.search_bar {
 	display: block;
     margin : 0 auto;
-	width: 30vw;
+	width: 40vw;
 	height: 5vh;
-	font-size: 5vh;
+	font-size: 36px;
 	text-align: center;
+    border-radius: 10px;
 }
+
+input.search_bar:focus{
+    outline: none;
+}
+
 
 div.container {
 	border: 2px solid red;
@@ -32,13 +38,14 @@ div.title{
 
 div.authors{
 	text-align: center;
-	font-size: 1vw;
+	font-size: 14px;
 	padding: 5px;
+    font-weight: lighter;
 }
 
 div.description{
 	text-align: center;
-	font-size: 18px;
+	font-size: 16px;
 	overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 2;
