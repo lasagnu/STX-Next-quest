@@ -2,8 +2,7 @@ let url = 'https://www.googleapis.com/books/v1/volumes?q='
 let start_index = 0
 let search_phrase = ''
 
-function httpGetAsync(url, callback)
-{
+function httpGetAsync(url, callback){
     let request = new XMLHttpRequest();
     request.onreadystatechange = function() { 
         if (request.readyState == 4 && request.status == 200)
